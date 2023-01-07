@@ -19,7 +19,7 @@
 
 ### Tópicos 
 
-:small_blue_diamond: [Project Status](#status-do-projeto)
+:small_blue_diamond: [Project Status](#project-status)
 
 :small_blue_diamond: [Description](#project-description)
 
@@ -34,7 +34,7 @@
 :small_blue_diamond: [Docker Image](#docker-image)
 
 
-## Status do projeto
+## Project Status
 
 <!-- PROJECT STATUS -->
 
