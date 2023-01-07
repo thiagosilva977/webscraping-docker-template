@@ -21,7 +21,7 @@ RUN pip install --upgrade pip && \
     python -m virtualenv $HOME/venv && \
     chmod 777 -R $HOME/venv
 
-ADD package package
+#ADD package package
 
 RUN source $HOME/venv/bin/activate && \
     pip install package/*.whl
