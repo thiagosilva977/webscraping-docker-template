@@ -23,9 +23,8 @@ RUN pip install --upgrade pip && \
 
 #ADD package package
 
-RUN source $HOME/venv/bin/activate && \
-    pip install package/*.whl
-# kognita.azurecr.io/coleta-dimovel
+#RUN source $HOME/venv/bin/activate && \
+#    pip install package/*.whl
 
 FROM python:3.8
 SHELL ["/bin/bash", "-c"]
