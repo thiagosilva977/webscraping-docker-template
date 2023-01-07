@@ -14,7 +14,8 @@ from scrapertype_scrapername.source.scrapername import ScraperName
 @click.command("execute-scraper")
 @click.option("--scraper-name", type=click.STRING, help="", default='default_scraper')
 @click.option("--execution-type", type=click.STRING, help="", default='normal')
-@click.option("--doctype-to-export", type=click.STRING, help="Accepts csv, xlsx and parquet", default='csv')
+@click.option("--doctype-to-export", type=click.STRING, help="Accepts csv and parquet", default='csv')
+@click.option("--local-path-to-export", type=click.STRING, help="", default=None)
 @click.option("--received-input", type=click.STRING, help="", default=None)
 @click.option("--max-chunk-lines", type=click.INT, help="", default=5000)
 @click.option("--max-worker-instances", type=click.INT, help="", default=1)
@@ -40,6 +41,7 @@ from scrapertype_scrapername.source.scrapername import ScraperName
 def main(scraper_name: str,
          execution_type: str,
          doctype_to_export: str,
+         local_path_to_export: str,
          received_input: str,
          max_chunk_lines: int,
          max_worker_instances: int,
@@ -95,6 +97,7 @@ def main(scraper_name: str,
                                     is_testing=run_test,
                                     project_path=project_path,
                                     doctype_to_export=doctype_to_export,
+                                    local_path_to_export=local_path_to_export,
                                     received_input=received_input,
                                     max_chunk_lines=max_chunk_lines,
                                     max_worker_instances=max_worker_instances,

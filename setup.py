@@ -23,7 +23,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            "execute-scraper=scraper_scrapername.main:main"
+            "execute-scraper=scrapertype_scrapername.main:main"
         ]
     },
     include_package_data=True

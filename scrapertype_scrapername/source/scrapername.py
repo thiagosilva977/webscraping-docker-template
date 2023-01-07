@@ -1,5 +1,8 @@
 import datetime
+import os
+import platform
 import random
+import subprocess
 import sys
 import time
 import traceback
@@ -24,6 +27,7 @@ class ScraperName:
                  is_testing: bool,
                  project_path: str,
                  doctype_to_export: str,
+                 local_path_to_export: str,
                  received_input: str,
                  max_chunk_lines: int,
                  max_worker_instances: int,
@@ -77,6 +81,7 @@ class ScraperName:
         self._execution_type = execution_type
         self._project_path = project_path
         self._doctype_to_export = doctype_to_export
+        self._local_path_to_export = local_path_to_export
         self._received_input = received_input
         self._max_chunk_lines = max_chunk_lines
         self._max_worker_instances = max_worker_instances
@@ -101,7 +106,7 @@ class ScraperName:
         self._run_test = is_testing
 
     def run_scrapername(self):
-        something = ''
+        values_to_return = ''
         list_of_values_to_save = []
         for param in self._parameters_to_run:
             try:
@@ -122,12 +127,13 @@ class ScraperName:
         if len(list_of_values_to_save) == 0:
             pass
         else:
+            values_to_return = list_of_values_to_save
             data_schema = data_schemas.get_schema(source_name='test_site')
             self.data_export(doctype_to_export=self._doctype_to_export,
                              dict_list_to_export=list_of_values_to_save,
                              pa_schema_to_export=data_schema)
 
-        return something
+        return values_to_return
 
     def search_engine(self, some_parameter):
         list_results_to_parse = []
@@ -263,7 +269,12 @@ class ScraperName:
         # Or just save to file
 
         rand_number = self.create_random_stringnum()
-        userdir = Path(self._project_path).joinpath(f"{self._scraper_name}_{rand_number}.{self._doctype_to_export}")
+        if self._local_path_to_export is not None:
+            userdir = Path(self._local_path_to_export).joinpath(f"{self._scraper_name}_{rand_number}."
+                                                                f"{self._doctype_to_export}")
+
+        else:
+            userdir = Path(self._project_path).joinpath(f"{self._scraper_name}_{rand_number}.{self._doctype_to_export}")
         filename_ofc = str(f"{self._scraper_name}_{rand_number}.{self._doctype_to_export}")
         try:
             df_selected = pd.DataFrame(dict_list_to_export)
@@ -311,14 +322,34 @@ class ScraperName:
                     pass
 
             df_selected = df_selected.replace(r'^None$', None, regex=True)
+            print(df_selected)
             pa_table_format = pa.table(data=df_selected, schema=pa_schema_to_export)
 
             if doctype_to_export == 'csv':
                 pyacsv.write_csv(pa_table_format, userdir)
                 print('saved file: ', userdir)
+                try:
+                    if platform.system() == "Windows":
+                        os.startfile(userdir)
+                    elif platform.system() == "Darwin":
+                        subprocess.Popen(["open", userdir])
+                    else:
+                        subprocess.Popen(["xdg-open", userdir])
+                except:
+                    pass
+
             if doctype_to_export == 'parquet':
                 pyaparquet.write_table(pa_table_format, userdir)
                 print('saved file: ', userdir)
+                try:
+                    if platform.system() == "Windows":
+                        os.startfile(userdir)
+                    elif platform.system() == "Darwin":
+                        subprocess.Popen(["open", userdir])
+                    else:
+                        subprocess.Popen(["xdg-open", userdir])
+                except:
+                    pass
 
             # some function to export to storage
             #
