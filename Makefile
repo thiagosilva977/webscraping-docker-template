@@ -1,6 +1,7 @@
 DOCKER_IMAGE_NAME=thiago977/webscraping-template
 DOCKER_IMAGE_TAG=1.0.0
 
+# instala as dependências do projeto
 setup:
 	pip3 install -e . --upgrade --no-cache-dir
 	mkdir -p pipeline
@@ -53,9 +54,3 @@ do_all:
 	make setup
 	make docker/image
 	make docker/push-latest
-
-# Remove docker login with this commands
-#service docker stop
-#rm ~/.docker/config.json
-#service docker start
-#docker login
