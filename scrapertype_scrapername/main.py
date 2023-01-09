@@ -1,7 +1,5 @@
 import click
 
-import click
-
 import scrapertype_scrapername.source.parameters_manager as parameters_manager
 from scrapertype_scrapername.constants import AWS_S3_KEY_ENV, AWS_S3_SECRET_ENV, AWS_S3_REGION_ENV, \
     PROXY_SERVICE_USER_ENV, PROXY_SERVICE_PASS_ENV, \
@@ -65,6 +63,37 @@ def main(scraper_name: str,
          proxy_service_pass: str,
          is_running_local: bool,
          ):
+    """
+    Main program execution.
+
+    :param scraper_name: Name of scrapper.
+    :param execution_type: Type of execution of program.
+    :param doctype_to_export: If you want to export data to .csv or .parquet.
+    :param local_path_to_export: Select some path to export data.
+    :param received_input: Some received input.
+    :param max_chunk_lines: Maximum chunk of data.
+    :param max_worker_instances: Identify how many instances that will run on some pipeline.
+    :param current_worker_number: Identify the current worker number(instance number of pipeline).
+    :param aws_s3_key: Aws Key.
+    :param aws_s3_secret: Aws Secret.
+    :param aws_s3_region: Aws Region.
+    :param customer_s3_key: Customer AWS s3 Key.
+    :param customer_s3_secret: Customer Aws Secret.
+    :param customer_s3_region: Customer Aws Region.
+    :param customer_s3_bucket: Customer aws s3 bucket.
+    :param customer_s3_prefix: Customer AWS s3 prefix.
+    :param option_save_to_customer_bucket: If is allowed to save on customer aws s3 storage.
+    :param mongo_host: Mongodb Host.
+    :param mongo_user: Mongodb User.
+    :param mongo_password: Mongodb Password.
+    :param sql_host: SQL Host.
+    :param sql_user: SQL User.
+    :param sql_password: SQL Password.
+    :param proxy_service_user: Some proxy service user.
+    :param proxy_service_pass: Some proxy service password.
+    :param is_running_local: If program is running on local machine.
+    :return:
+    """
     param_parquet = PARAMS_FILE
     project_path = PROJECT_PATH
 
@@ -81,8 +110,10 @@ def main(scraper_name: str,
     else:
         run_test = False
 
+    # Get all parameters to run on ./assets/.parquet file
     all_params = parameters_manager.create_or_get_all_params_list(parquet_dir=param_parquet)
 
+    # Manage witch parameter runs
     parameters_to_run = parameters_manager.parameters_organizer(parameter_list=all_params,
                                                                 max_workers=max_worker_instances,
                                                                 worker_number=current_worker_number,
@@ -91,6 +122,7 @@ def main(scraper_name: str,
     print('Selected parameters: ', len(parameters_to_run))
 
     if run_program:
+        # Passes all input information to main class
         scraper_class = ScraperName(parameters_to_run=parameters_to_run,
                                     scraper_name=scraper_name,
                                     execution_type=execution_type,
@@ -120,6 +152,7 @@ def main(scraper_name: str,
                                     proxy_service_user=proxy_service_user,
                                     proxy_service_pass=proxy_service_pass
                                     )
+        # Select execution types
         if execution_type == 'normal':
             stats_to_return = scraper_class.run_scrapername()
         elif execution_type == 'create_params':
@@ -128,7 +161,9 @@ def main(scraper_name: str,
     else:
         pass
 
+    # Show run stats
     print(stats_to_return)
+    # Save some output file
     save_output_data(str(stats_to_return), is_running_local)
 
 

@@ -24,13 +24,13 @@ def parameters_organizer(parameter_list, max_workers=4, worker_number=0, is_test
 
         for i in range(max_workers):
             if worker_number == i + 1:
-                parameter_list = __manage_group_list_v2(parameter_list=param_list,
-                                                        max_workers_number=max_workers)[i]
+                parameter_list = groups_of_lists_division(parameter_list=param_list,
+                                                          max_workers_number=max_workers)[i]
 
     return parameter_list
 
 
-def __manage_group_list_v2(parameter_list, max_workers_number=4):
+def groups_of_lists_division(parameter_list, max_workers_number=4):
     try:
         max_workers_number = int(max_workers_number)
     except:

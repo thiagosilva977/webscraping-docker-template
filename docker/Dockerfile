@@ -5,16 +5,15 @@ RUN useradd -ms /bin/bash runner
 
 ENV HOME="/home/runner"
 
-RUN mkdir -p $HOME/.ssh/
-ADD id_rsa $HOME/.ssh/id_rsa
-RUN chmod 777 -R $HOME/.ssh/
+# To access private projects
+#RUN mkdir -p $HOME/.ssh/
+#ADD id_rsa $HOME/.ssh/id_rsa
+#RUN chmod 777 -R $HOME/.ssh/
 
 USER runner
 
-# RUN touch $HOME/.ssh/known_hosts && \
-#     ssh-keyscan -t rsa github.com > $HOME/.ssh/known_hosts
-
-ENV GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/id_rsa"
+# To access private projects
+#ENV GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/id_rsa"
 
 RUN pip install --upgrade pip && \
     pip install virtualenv && \
