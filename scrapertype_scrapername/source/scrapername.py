@@ -49,33 +49,6 @@ class ScraperName:
                  sql_mongo_password: str,
                  proxy_service_user: str,
                  proxy_service_pass: str):
-        """
-
-        :param parameters_to_run:
-        :param scraper_name:
-        :param execution_type:
-        :param received_input:
-        :param max_chunk_lines:
-        :param max_worker_instances:
-        :param current_worker_number:
-        :param aws_s3_key:
-        :param aws_s3_secret:
-        :param aws_s3_region:
-        :param customer_s3_key:
-        :param customer_s3_secret:
-        :param customer_s3_region:
-        :param customer_s3_bucket:
-        :param customer_s3_prefix:
-        :param option_save_to_customer_bucket:
-        :param mongo_host:
-        :param mongo_user:
-        :param mongo_password:
-        :param sql_host:
-        :param sql_mongo_user:
-        :param sql_mongo_password:
-        :param proxy_service_user:
-        :param proxy_service_pass:
-        """
         self._parameters_to_run = parameters_to_run
         self._scraper_name = scraper_name
         self._execution_type = execution_type
@@ -106,6 +79,10 @@ class ScraperName:
         self._run_test = is_testing
 
     def run_scrapername(self):
+        """
+        Function responsible for program run.
+        :return: what you want for output.
+        """
         values_to_return = ''
         list_of_values_to_save = []
         for param in self._parameters_to_run:
@@ -115,7 +92,7 @@ class ScraperName:
                 for item_to_parse in docs_to_parse:
                     try:
                         value_to_save = self.parse_documents(current_parameter=param,
-                                                             document_to_parse=item_to_parse)
+                                                             data_to_parse=item_to_parse)
                         if value_to_save is not None:
                             list_of_values_to_save.append(value_to_save)
                     except:
@@ -136,6 +113,11 @@ class ScraperName:
         return values_to_return
 
     def search_engine(self, some_parameter):
+        """
+        Function responsible for search data.
+        :param some_parameter: Parameter to search data.
+        :return: raw data.
+        """
         list_results_to_parse = []
 
         try:
@@ -156,13 +138,14 @@ class ScraperName:
         time.sleep(random.uniform(1, 2))
         return list_results_to_parse
 
-    def parse_documents(self, current_parameter, document_to_parse):
+    def parse_documents(self, current_parameter, data_to_parse):
         """
-        Parsing Json function.
-        :param document_to_parse:
-        :type current_parameter: object
-        :return: parsed JSON document to database.
+        Function responsible for parse data.
+        :param current_parameter: Current parameter that the data was found.
+        :param data_to_parse: Current data to parse.
+        :return: parsed data.
         """
+
         allow_to_continue_parsing = True
         try:
             # Do something
@@ -181,7 +164,7 @@ class ScraperName:
                 parsed_stars = None
 
                 # Each document is soup type
-                soup = BeautifulSoup(document_to_parse, 'html.parser')
+                soup = BeautifulSoup(data_to_parse, 'html.parser')
                 try:
                     info_id_and_url = soup.find('a', {'class': 'title'}, href=True)
                     try:
@@ -260,6 +243,13 @@ class ScraperName:
             return None
 
     def data_export(self, doctype_to_export: str, dict_list_to_export: list, pa_schema_to_export: pa.schema):
+        """
+        Function responsible for export all parsed data.
+        :param doctype_to_export: Save to .csv file or .parquet
+        :param dict_list_to_export: List of dicts to save.
+        :param pa_schema_to_export: The data schema.
+        :return: all collected data saved.
+        """
 
         # some function to export to mongodb, sql or postgres...
         #
@@ -268,7 +258,7 @@ class ScraperName:
 
         # Or just save to file
 
-        rand_number = self.create_random_stringnum()
+        rand_number = self.create_random_code()
         if self._local_path_to_export is not None:
             userdir = Path(self._local_path_to_export).joinpath(f"{self._scraper_name}_{rand_number}."
                                                                 f"{self._doctype_to_export}")
@@ -361,13 +351,22 @@ class ScraperName:
 
     @staticmethod
     def create_parameters():
+        """
+        Function responsible for crate parameters to scrape data.
+        :return:
+        """
         import pandas as pd
         df = pd.DataFrame([{'parameter': 'https://webscraper.io/test-sites/e-commerce/allinone/computers/laptops'},
                            {'parameter': 'https://webscraper.io/test-sites/e-commerce/allinone/computers/tablets'}])
 
         df.to_parquet('scraper_parameters.parquet')
 
-    def create_random_stringnum(self):
+    @staticmethod
+    def create_random_code():
+        """
+        Create some random code.
+        :return:
+        """
         import random
         o = ''
         for i in range(8):
