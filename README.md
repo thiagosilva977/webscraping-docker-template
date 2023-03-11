@@ -17,21 +17,21 @@
 
 
 
-### Tópicos 
+## Topics
 
-:small_blue_diamond: [Project Status](#project-status)
+[Project Status](#project-status)
 
-:small_blue_diamond: [Description](#project-description)
+[Description](#project-description)
 
-:small_blue_diamond: [Features](#features)
+[Features](#features)
 
-:small_blue_diamond: [Requirements](#requirements)
+[Requirements](#requirements)
 
-:small_blue_diamond: [Dependencies and Libraries](#dependencies-and-libraries)
+[Dependencies and Libraries](#dependencies-and-libraries)
 
-:small_blue_diamond: [Directory Tree](#directory-tree)
+[Directory Tree](#directory-tree)
 
-:small_blue_diamond: [Docker Image](#docker-image)
+[Docker Image](#docker-image)
 
 
 ## Project Status
