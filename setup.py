@@ -25,8 +25,8 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            "scrape-url=websites_scraper.main:main",
-            "create-parameters=scrapertype_scrapername.main:parameter_creation",
+            "scrape-url=project_scraper.main:main",
+            "create-parameters=project_scraper.main:parameter_creation",
         ]
     },
     include_package_data=True
