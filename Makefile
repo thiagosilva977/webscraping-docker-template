@@ -1,5 +1,5 @@
 # Docker info
-DOCKER_IMAGE_NAME=thiago977/thiagosilva_consulta_juridica
+DOCKER_IMAGE_NAME=thiago977/webscraping-template
 DOCKER_IMAGE_TAG=1.0.0
 
 # Install project dependencies
