@@ -21,12 +21,15 @@ setup(
         "fastparquet>=0.8.1",
         "pyarrow>=10.0.1",
         "scrapy>=2.8.0",
+        "fastapi>=0.95.0",
+        "uvicorn>=0.21.1",
+        "pydantic>=1.10.7",
 
     ],
     entry_points={
         'console_scripts': [
-            "scrape-url=project_scraper.main:main",
-            "create-parameters=project_scraper.main:parameter_creation",
+            "scrape-url=project_scraper.main_scraper:main",
+            "initialize-api=project_scraper.main:main_fastapi",
         ]
     },
     include_package_data=True

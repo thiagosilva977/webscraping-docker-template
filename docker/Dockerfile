@@ -1,4 +1,4 @@
-FROM python:3.8 as installer
+FROM python:3.10 as installer
 SHELL ["/bin/bash", "-c"]
 
 RUN useradd -ms /bin/bash runner
@@ -24,13 +24,14 @@ ADD package package
 
 RUN source $HOME/venv/bin/activate && \
     pip install package/*.whl
-# kognita.azurecr.io/coleta-dimovel
 
-FROM python:3.8
+FROM python:3.10
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /venv
 COPY --from=installer /home/runner/venv /home/runner/venv
 
 ENV PATH="/home/runner/venv/bin:$PATH"
-
+# Expose ports for fastapi
+EXPOSE 5000
+EXPOSE 8000

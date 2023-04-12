@@ -3,16 +3,34 @@ import os
 
 import click
 from scrapy.crawler import CrawlerProcess
-
+from fastapi import FastAPI
+from pydantic import BaseModel
 from project_scraper.spiders.my_spider import MySpiderSpider
+from uvicorn import run
 
 logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
+app = FastAPI()
+
+
+@app.post("/consulta_processo")
+async def consulta_processo(data: dict):
+    print('data_received: ', data)
+    result = {"mensagem": "Processo consultado com sucesso", "numero_processo": data['numero_processo']}
+
+    return result
+
+
+@click.command("initialize-api")
+@click.option("--port", default=5000, help="Port number to use.")
+@click.option("--host", default='0.0.0.0', help="Host number to use.")
+def main_fastapi(port, host):
+    run(app, port=port, host=host)
 
 
 @click.command("scrape-url")
 @click.option("--url", type=click.STRING, help="Website url to scrape data", default=None)
 @click.option("--output-path", type=click.STRING, help="Your local path to save files", default=".")
-def main(url: str, output_path: str):
+def main_scraper(url: str, output_path: str):
     """
     Main program execution.
     https://www.randomlists.com/urls
@@ -62,4 +80,12 @@ def main(url: str, output_path: str):
 
 
 if __name__ == '__main__':
-    main()
+    """import requests
+
+    url = "http://localhost:8000/consulta_processo"
+    json_data = {'numero_processo': '0x4a555'}
+
+    response = requests.post(url, json=json_data)
+    print(response.json())"""
+
+    main_fastapi()
